@@ -25,7 +25,13 @@ import type {
   TrafficEntry,
   WorkingHours,
 } from "@/types";
-import { createDemoState, DEMO_PASSWORD } from "./seed";
+import { createDemoState } from "./seed";
+import {
+  clearCredentials,
+  generateLocalPassword,
+  setCredential,
+  verifyCredential,
+} from "./credentials";
 import { EMPLOYEE_COLORS, uid } from "@/lib/utils";
 
 const STORAGE_KEY = "moj-bar-demo-v1";
@@ -39,11 +45,17 @@ type StoreContextValue = AppState & {
     email: string;
     password: string;
   }) => Promise<{ ok: boolean; error?: string }>;
+  loadSampleData: () => void;
   logout: () => void;
   completeOnboarding: (input: {
     locationName: string;
     address?: string;
   }) => void;
+  createEmployeeAccess: (input: {
+    displayName: string;
+    email: string;
+    color: string;
+  }) => Promise<{ password: string }>;
   updateLocation: (patch: Partial<Location>) => void;
   upsertShift: (shift: Omit<Shift, "locationId"> & { locationId?: string }) => void;
   deleteShift: (id: string) => void;
@@ -87,10 +99,10 @@ function loadState(): AppState {
   if (typeof window === "undefined") return emptyState();
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return createDemoState();
+    if (!raw) return emptyState();
     return JSON.parse(raw) as AppState;
   } catch {
-    return createDemoState();
+    return emptyState();
   }
 }
 
@@ -134,14 +146,21 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       return { ok: false, error: "Geslo mora imeti vsaj 6 znakov." };
     }
 
-    // Sinhrono preberi trenutno stanje (tudi iz storage)
+    const okCred = await verifyCredential(normalized, password);
+    if (!okCred) {
+      return {
+        ok: false,
+        error: "Napačna e-pošta ali geslo. Registrirajte se ali naložite vzorčne podatke.",
+      };
+    }
+
     const prev = typeof window !== "undefined" ? loadState() : state;
     const member = prev.members.find(
       (m) => m.email?.toLowerCase() === normalized && m.active
     );
 
     if (member && prev.location) {
-      const next: AppState = {
+      setState({
         ...prev,
         session: {
           profile: {
@@ -152,30 +171,28 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
           role: member.role,
           locationId: prev.location.id,
         },
-      };
-      setState(next);
+      });
       return { ok: true };
     }
 
-    if (
-      normalized === "ana@mojbar.si" ||
-      normalized === "demo@mojbar.si" ||
-      password === DEMO_PASSWORD
-    ) {
-      // Demo lastnik – če geslo ustreza in e-pošta ni znana, naloži seed
-      if (
-        normalized === "ana@mojbar.si" ||
-        normalized === "demo@mojbar.si"
-      ) {
-        setState(createDemoState());
-        return { ok: true };
-      }
+    // Lastnik po registraciji, pred/med onboardingom
+    if (prev.session?.profile.email === normalized || !prev.location) {
+      setState({
+        ...prev,
+        session: {
+          profile: {
+            id: prev.session?.profile.id || uid("owner"),
+            email: normalized,
+            fullName: prev.session?.profile.fullName || normalized,
+          },
+          role: "owner",
+          locationId: prev.location?.id || "",
+        },
+      });
+      return { ok: true };
     }
 
-    return {
-      ok: false,
-      error: "Neznan uporabnik. Poskusite ana@mojbar.si / demo1234 ali se registrirajte.",
-    };
+    return { ok: false, error: "Račun nima dostopa do lokacije." };
   }, [state]);
 
   const registerOwner = useCallback(
@@ -183,12 +200,14 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       if (input.password.length < 6) {
         return { ok: false, error: "Geslo mora imeti vsaj 6 znakov." };
       }
+      const email = input.email.trim().toLowerCase();
+      await setCredential(email, input.password);
       const ownerId = uid("owner");
       setState({
         session: {
           profile: {
             id: ownerId,
-            email: input.email.trim().toLowerCase(),
+            email,
             fullName: input.fullName.trim(),
           },
           role: "owner",
@@ -210,9 +229,38 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const loadSampleData = useCallback(() => {
+    clearCredentials();
+    setState(createDemoState());
+  }, []);
+
   const logout = useCallback(() => {
     setState((prev) => ({ ...prev, session: null }));
   }, []);
+
+  const createEmployeeAccess = useCallback(
+    async (input: { displayName: string; email: string; color: string }) => {
+      const email = input.email.trim().toLowerCase();
+      const password = generateLocalPassword();
+      await setCredential(email, password);
+      setState((prev) => {
+        if (!prev.location) return prev;
+        const member = {
+          id: uid("m"),
+          locationId: prev.location.id,
+          userId: uid("emp"),
+          role: "employee" as const,
+          displayName: input.displayName,
+          email,
+          color: input.color,
+          active: true,
+        };
+        return { ...prev, members: [...prev.members, member] };
+      });
+      return { password };
+    },
+    []
+  );
 
   const completeOnboarding = useCallback(
     (input: { locationName: string; address?: string }) => {
@@ -533,6 +581,7 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
   );
 
   const resetDemo = useCallback(() => {
+    clearCredentials();
     setState(createDemoState());
   }, []);
 
@@ -543,7 +592,9 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       isOwner: state.session?.role === "owner",
       login,
       registerOwner,
+      loadSampleData,
       logout,
+      createEmployeeAccess,
       completeOnboarding,
       updateLocation,
       upsertShift,
@@ -573,7 +624,9 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       ready,
       login,
       registerOwner,
+      loadSampleData,
       logout,
+      createEmployeeAccess,
       completeOnboarding,
       updateLocation,
       upsertShift,

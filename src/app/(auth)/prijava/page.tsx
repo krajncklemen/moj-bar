@@ -9,13 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useStore } from "@/lib/demo/store";
-import { DEMO_PASSWORD } from "@/lib/demo/seed";
 
 export default function PrijavaPage() {
   const router = useRouter();
-  const { login, resetDemo } = useStore();
-  const [email, setEmail] = useState("ana@mojbar.si");
-  const [password, setPassword] = useState(DEMO_PASSWORD);
+  const { login, loadSampleData } = useStore();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
@@ -68,27 +67,35 @@ export default function PrijavaPage() {
                 required
               />
             </div>
-            <Button className="w-full" size="lg" disabled={loading}>
+            <Button className="w-full" type="submit" size="lg" disabled={loading}>
               {loading ? "Prijavljam…" : "Prijava"}
             </Button>
           </form>
-          <div className="mt-4 space-y-2 text-center text-sm text-slate-500">
+          <div className="mt-4 space-y-3 text-center text-sm text-slate-500">
             <p>
               Nimate računa?{" "}
               <Link href="/registracija" className="font-medium text-teal-700">
                 Registracija lastnika
               </Link>
             </p>
-            <button
-              type="button"
-              className="text-xs text-slate-400 underline-offset-2 hover:underline"
-              onClick={() => {
-                resetDemo();
-                toast.message("Demo podatki obnovljeni (ana@mojbar.si / demo1234)");
-              }}
-            >
-              Obnovi demo (1 lastnik + 4 zaposleni)
-            </button>
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 p-3 text-left dark:border-slate-700 dark:bg-slate-900/50">
+              <p className="text-xs text-slate-500">
+                Lokalni vzorčni način (brez strežniškega Auth) – naloži primer
+                lokacije z urnikom.
+              </p>
+              <Button
+                type="button"
+                variant="secondary"
+                className="mt-2 w-full"
+                onClick={() => {
+                  loadSampleData();
+                  toast.message("Naloženi vzorčni podatki");
+                  router.push("/urnik");
+                }}
+              >
+                Naloži vzorčne podatke
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -9,14 +9,14 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useStore } from "@/lib/demo/store";
-import { DEMO_PASSWORD } from "@/lib/demo/seed";
-import { EMPLOYEE_COLORS, uid } from "@/lib/utils";
+import { EMPLOYEE_COLORS } from "@/lib/utils";
 
 export default function ZaposleniPage() {
-  const { members, upsertMember, deleteMember, isOwner } = useStore();
+  const { members, createEmployeeAccess, deleteMember, isOwner } = useStore();
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [color, setColor] = useState(EMPLOYEE_COLORS[1]);
+  const [saving, setSaving] = useState(false);
 
   const employees = members.filter((m) => m.role === "employee");
 
@@ -25,8 +25,8 @@ export default function ZaposleniPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Zaposleni</h1>
         <p className="text-sm text-slate-500">
-          Ob dodajanju se samodejno ustvari employee dostop (demo geslo:{" "}
-          {DEMO_PASSWORD})
+          Ob dodajanju se ustvari lokalni employee dostop; geslo se prikaže
+          enkrat.
         </p>
       </div>
 
@@ -35,28 +35,29 @@ export default function ZaposleniPage() {
           <CardHeader>
             <CardTitle>Dodaj zaposlenega</CardTitle>
             <CardDescription>
-              Zaposleni se lahko prijavi z e-pošto in demo geslom.
+              Geslo se generira naključno in shrani lokalno (demo način).
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form
               className="grid gap-3 sm:grid-cols-2"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                upsertMember({
-                  id: uid("m"),
-                  displayName,
-                  email: email.trim().toLowerCase(),
-                  color,
-                  role: "employee",
-                  active: true,
-                  userId: uid("emp"),
-                });
-                toast.success(
-                  `Dostop ustvarjen: ${email.toLowerCase()} / ${DEMO_PASSWORD}`
-                );
-                setDisplayName("");
-                setEmail("");
+                setSaving(true);
+                try {
+                  const { password } = await createEmployeeAccess({
+                    displayName,
+                    email,
+                    color,
+                  });
+                  toast.success(
+                    `Dostop ustvarjen za ${email.toLowerCase()}. Geslo (shrani zdaj): ${password}`
+                  );
+                  setDisplayName("");
+                  setEmail("");
+                } finally {
+                  setSaving(false);
+                }
               }}
             >
               <div>
@@ -86,7 +87,7 @@ export default function ZaposleniPage() {
                 />
               </div>
               <div className="flex items-end">
-                <Button type="submit">
+                <Button type="submit" disabled={saving}>
                   <Plus className="h-4 w-4" />
                   Dodaj + ustvari dostop
                 </Button>

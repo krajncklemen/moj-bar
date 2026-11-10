@@ -2,11 +2,12 @@ import { addDays, format, startOfWeek } from "date-fns";
 import type { AppState } from "@/types";
 import { uid } from "@/lib/utils";
 
-export const DEMO_PASSWORD = "demo1234";
+/** Vzorčni (sample) podatki – ni produkcijski račun / geslo. */
+export const SAMPLE_OWNER_EMAIL = "owner@example.com";
 
 export function createDemoState(): AppState {
-  const ownerId = "demo-owner";
-  const locationId = "demo-location";
+  const ownerId = "sample-owner";
+  const locationId = "sample-location";
 
   const members = [
     {
@@ -14,48 +15,48 @@ export function createDemoState(): AppState {
       locationId,
       userId: ownerId,
       role: "owner" as const,
-      displayName: "Ana Lastnica",
-      email: "ana@mojbar.si",
+      displayName: "Vzorčni lastnik",
+      email: SAMPLE_OWNER_EMAIL,
       color: "#0d9488",
       active: true,
     },
     {
       id: "m-1",
       locationId,
-      userId: "demo-emp-1",
+      userId: "sample-emp-1",
       role: "employee" as const,
-      displayName: "Marko Novak",
-      email: "marko@mojbar.si",
+      displayName: "Marko Primer",
+      email: "marko@example.com",
       color: "#0284c7",
       active: true,
     },
     {
       id: "m-2",
       locationId,
-      userId: "demo-emp-2",
+      userId: "sample-emp-2",
       role: "employee" as const,
-      displayName: "Sara Horvat",
-      email: "sara@mojbar.si",
+      displayName: "Sara Primer",
+      email: "sara@example.com",
       color: "#7c3aed",
       active: true,
     },
     {
       id: "m-3",
       locationId,
-      userId: "demo-emp-3",
+      userId: "sample-emp-3",
       role: "employee" as const,
-      displayName: "Luka Kovač",
-      email: "luka@mojbar.si",
+      displayName: "Luka Primer",
+      email: "luka@example.com",
       color: "#db2777",
       active: true,
     },
     {
       id: "m-4",
       locationId,
-      userId: "demo-emp-4",
+      userId: "sample-emp-4",
       role: "employee" as const,
-      displayName: "Eva Zupan",
-      email: "eva@mojbar.si",
+      displayName: "Eva Primer",
+      email: "eva@example.com",
       color: "#ea580c",
       active: true,
     },
@@ -127,8 +128,8 @@ export function createDemoState(): AppState {
     session: {
       profile: {
         id: ownerId,
-        email: "ana@mojbar.si",
-        fullName: "Ana Lastnica",
+        email: SAMPLE_OWNER_EMAIL,
+        fullName: "Vzorčni lastnik",
       },
       role: "owner",
       locationId,
@@ -136,10 +137,10 @@ export function createDemoState(): AppState {
     location: {
       id: locationId,
       ownerId,
-      name: "Demo Bar Ljubljana",
+      name: "Vzorčni bar",
       logoUrl: "",
-      facebookUrl: "https://www.facebook.com/",
-      address: "Trubarjeva 1, 1000 Ljubljana",
+      facebookUrl: "",
+      address: "Primerjeva 1, 1000 Ljubljana",
       workingHours: {
         pon: "08:00–24:00",
         tor: "08:00–24:00",

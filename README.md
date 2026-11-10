@@ -11,8 +11,8 @@ npm run dev
 
 Odprite [http://localhost:3000](http://localhost:3000).
 
-**Demo prijava:** `ana@mojbar.si` / `demo1234`  
-(1 lastnik + 4 zaposleni + smene + urnik za tekoči teden)
+**Lokalni vzorec:** na prijavi kliknite **Naloži vzorčne podatke**  
+(1 lastnik + 4 zaposleni + smene + urnik za tekoči teden; brez hardcodanega gesla)
 
 Brez `NEXT_PUBLIC_SUPABASE_*` teče **demo način** (localStorage). Z nastavljenim Supabase lahko zaženete SQL v `supabase/migrations/`.
 

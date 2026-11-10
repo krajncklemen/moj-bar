@@ -328,6 +328,7 @@ create policy "Lastnik ureja uspešnost"
   with check (public.is_location_owner(location_id));
 
 -- Storage bucket za logotipe
+-- Pot objekta: logos/{location_id}/... — piše samo lastnik te lokacije
 insert into storage.buckets (id, name, public)
 values ('logos', 'logos', true)
 on conflict (id) do nothing;
@@ -341,8 +342,26 @@ create policy "Lastniki nalagajo logotipe"
   with check (
     bucket_id = 'logos'
     and auth.role() = 'authenticated'
+    and public.is_location_owner(((storage.foldername(name))[1])::uuid)
   );
 
 create policy "Lastniki posodabljajo logotipe"
   on storage.objects for update
-  using (bucket_id = 'logos' and auth.role() = 'authenticated');
+  using (
+    bucket_id = 'logos'
+    and auth.role() = 'authenticated'
+    and public.is_location_owner(((storage.foldername(name))[1])::uuid)
+  )
+  with check (
+    bucket_id = 'logos'
+    and auth.role() = 'authenticated'
+    and public.is_location_owner(((storage.foldername(name))[1])::uuid)
+  );
+
+create policy "Lastniki brišejo logotipe"
+  on storage.objects for delete
+  using (
+    bucket_id = 'logos'
+    and auth.role() = 'authenticated'
+    and public.is_location_owner(((storage.foldername(name))[1])::uuid)
+  );
