@@ -33,14 +33,6 @@ toggle?.addEventListener("click", () => {
   toggle.setAttribute("aria-label", show ? "Skrij geslo" : "Prikaži geslo");
 });
 
-document.querySelectorAll(".chip").forEach((chip) => {
-  chip.addEventListener("click", () => {
-    form.username.value = chip.dataset.user;
-    form.password.value = chip.dataset.pass;
-    form.username.focus();
-  });
-});
-
 form?.addEventListener("submit", (e) => {
   e.preventDefault();
   errorEl.hidden = true;
@@ -62,6 +54,25 @@ form?.addEventListener("submit", (e) => {
     name: user.name,
   });
   location.href = "./dashboard.html";
+});
+
+document.getElementById("load-sample")?.addEventListener("click", () => {
+  if (typeof applySampleSeed !== "function") {
+    errorEl.textContent = "Vzorčni modul ni naložen.";
+    errorEl.hidden = false;
+    return;
+  }
+  const creds = applySampleSeed();
+  const box = document.getElementById("sample-creds");
+  if (box) {
+    box.hidden = false;
+    box.innerHTML = `<p><strong>Vzorčni računi (gesla so naključna – shrani zdaj):</strong></p>
+      <p>Admin: <code>${creds.adminUser}</code> · <code>${creds.adminPass}</code></p>
+      <p>Zaposleni: <code>${creds.staffUser}</code> · <code>${creds.staffPass}</code> (enako geslo imajo tudi marko, sara, luka, eva)</p>`;
+  }
+  form.username.value = creds.adminUser;
+  form.password.value = creds.adminPass;
+  errorEl.hidden = true;
 });
 
 /* ——— Registracija v 2 korakih ——— */
@@ -117,7 +128,7 @@ document.getElementById("reg-form-1")?.addEventListener("submit", (e) => {
     regError.hidden = false;
     return;
   }
-  if (FOCH.users[username] && username !== "admin") {
+  if (FOCH.users[username]) {
     regError.textContent = "To uporabniško ime je že zasedeno.";
     regError.hidden = false;
     return;
@@ -139,8 +150,8 @@ document.getElementById("reg-form-2")?.addEventListener("submit", (e) => {
   e.preventDefault();
   if (!pendingAdmin) return;
   const fd = new FormData(e.target);
-  const v1 = String(fd.get("venue1") || "Foch Bar").trim() || "Foch Bar";
-  const v2 = String(fd.get("venue2") || "Label Bar").trim() || "Label Bar";
+  const v1 = String(fd.get("venue1") || "Lokal A").trim() || "Lokal A";
+  const v2 = String(fd.get("venue2") || "Lokal B").trim() || "Lokal B";
 
   const users = { ...FOCH.users };
   users[pendingAdmin.username] = {

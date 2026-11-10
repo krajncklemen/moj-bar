@@ -17,20 +17,24 @@ const NEXT_MONTH = "2026-10";
 const PLAN_MONTHS = [CURRENT_MONTH, NEXT_MONTH];
 
 function getSession() {
-  const as = new URLSearchParams(location.search).get("as");
-  if (as && FOCH.users[as]) {
-    const u = FOCH.users[as];
-    sessionStorage.setItem(
-      "foch_user",
-      JSON.stringify({ username: as, role: u.role, name: u.name })
-    );
-  }
   const raw = sessionStorage.getItem("foch_user");
   if (!raw) {
     location.replace("./index.html");
     return null;
   }
-  return JSON.parse(raw);
+  try {
+    const session = JSON.parse(raw);
+    if (!session || !session.username || !session.role) {
+      sessionStorage.removeItem("foch_user");
+      location.replace("./index.html");
+      return null;
+    }
+    return session;
+  } catch (e) {
+    sessionStorage.removeItem("foch_user");
+    location.replace("./index.html");
+    return null;
+  }
 }
 
 function emp(id) {
@@ -409,6 +413,12 @@ if (!user) {
     }
   } catch (e) {
     /* privzeti lokali */
+  }
+  try {
+    const rawDuties = localStorage.getItem("foch_duties_v1");
+    if (rawDuties) FOCH.duties = JSON.parse(rawDuties) || [];
+  } catch (e) {
+    FOCH.duties = FOCH.duties || [];
   }
   loadShifts();
   loadEmployees();
@@ -1591,7 +1601,8 @@ if (!user) {
       home: "foch",
       history: {}
     });
-    const password = String(payload.password || "").trim() || "foch2026";
+    const password = String(payload.password || "").trim();
+    if (password.length < 6) return { ok: false, msg: "Geslo naj ima vsaj 6 znakov." };
     FOCH.users[id] = { password, role: "zaposleni", name, id };
     saveEmployees();
     saveUsers();
@@ -1650,7 +1661,7 @@ if (!user) {
         <label class="field"><span>Telefon</span><input type="text" name="phone" /></label>
         <label class="field field-wide"><span>E-pošta</span><input type="email" name="email" /></label>
         <label class="field field-wide"><span>Naslov</span><input type="text" name="address" /></label>
-        <label class="field"><span>Geslo za prijavo</span><input type="text" name="password" value="foch2026" required /></label>
+        <label class="field"><span>Geslo za prijavo</span><input type="text" name="password" required minlength="6" autocomplete="new-password" placeholder="nastavi geslo" /></label>
         <button type="submit" class="cta">Dodaj</button>
       </form>
       <p class="flash" id="emp-flash" hidden></p>

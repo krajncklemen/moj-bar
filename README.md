@@ -12,8 +12,7 @@ npm run dev
 
 Odpri http://127.0.0.1:3000
 
-**Demo:** `admin` / `foch2026` ali `monika` / `foch2026`  
-Registracija lastnika: 2 koraka (račun + imena lokalov).
+**Začetek:** registracija v 2 korakih **ali** gumb »Naloži vzorčne podatke« (gesla se ustvarijo naključno in prikažejo enkrat).
 
 ## Funkcije
 

@@ -77,19 +77,12 @@
           </form>
 
           <div class="demo">
-            <p>Demo dostop</p>
-            <div class="demo-row">
-              <button type="button" class="chip" data-user="admin" data-pass="foch2026">
-                <em>Admin</em>
-                <span>admin · foch2026</span>
-              </button>
-              <button type="button" class="chip" data-user="monika" data-pass="foch2026">
-                <em>Zaposleni</em>
-                <span>monika · foch2026</span>
-              </button>
-            </div>
-            <p class="hint-staff">Ostali: violeta, naja, karin, neza — isto geslo</p>
-            <p class="hint-staff" style="margin-top:14px">
+            <p>Začetek</p>
+            <button type="button" class="cta" id="load-sample" style="margin-bottom:12px">
+              <span>Naloži vzorčne podatke</span>
+            </button>
+            <div id="sample-creds" class="hint-staff" hidden style="margin-bottom:12px;line-height:1.5"></div>
+            <p class="hint-staff">
               Nov lokal?
               <button type="button" id="open-reg" class="ghost" style="margin-left:8px;height:auto;padding:4px 10px;display:inline-flex;vertical-align:middle">Registracija (2 koraka)</button>
             </p>
@@ -135,11 +128,11 @@
               <p class="sub" style="margin-bottom:16px">Korak 2/2 — poimenuj lokala (ista podstran za admin in zaposlene).</p>
               <label class="field">
                 <span>Lokal 1</span>
-                <input type="text" name="venue1" value="Foch Bar" required />
+                <input type="text" name="venue1" value="Lokal A" required />
               </label>
               <label class="field">
                 <span>Lokal 2</span>
-                <input type="text" name="venue2" value="Label Bar" required />
+                <input type="text" name="venue2" value="Lokal B" required />
               </label>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <button type="button" class="ghost" id="reg-back-1">Nazaj</button>
@@ -155,6 +148,7 @@
   <footer class="foot">MOJ BAR · interni portal · 2026</footer>
   <script src="/js/storage.js"></script>
   <script src="/js/data.js"></script>
+  <script src="/js/seed.js"></script>
   <script src="/js/auth.js"></script>
 </body>
 </html>
