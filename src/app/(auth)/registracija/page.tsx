@@ -32,14 +32,16 @@ export default function RegistracijaPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center px-4 py-10">
+    <div className="relative flex min-h-screen items-center justify-center px-4 py-10 text-slate-900 dark:text-slate-50">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_10%,#99f6e4_0%,transparent_30%),linear-gradient(180deg,#f8fafc,#f0fdfa)] dark:bg-[linear-gradient(180deg,#020617,#042f2e)]" />
       <Card className="relative z-10 w-full max-w-md">
         <CardHeader>
-          <div className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">
+          <div className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700 dark:text-teal-300">
             Moj Bar
           </div>
-          <CardTitle className="mt-2 text-2xl">Registracija lastnika</CardTitle>
+          <CardTitle className="mt-2 text-2xl text-slate-900 dark:text-white">
+            Registracija lastnika
+          </CardTitle>
           <CardDescription>
             V manj kot 5 minutah ustvari lokacijo in urnik.
           </CardDescription>
@@ -76,13 +78,16 @@ export default function RegistracijaPage() {
                 required
               />
             </div>
-            <Button className="w-full" size="lg" disabled={loading}>
+            <Button className="w-full text-white" type="submit" size="lg" disabled={loading}>
               {loading ? "Ustvarjam…" : "Ustvari račun"}
             </Button>
           </form>
-          <p className="mt-4 text-center text-sm text-slate-500">
+          <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">
             Že imate račun?{" "}
-            <Link href="/prijava" className="font-medium text-teal-700">
+            <Link
+              href="/prijava"
+              className="font-medium text-teal-700 dark:text-teal-300"
+            >
               Prijava
             </Link>
           </p>

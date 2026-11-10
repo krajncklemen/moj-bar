@@ -49,3 +49,14 @@ body {
 ::selection {
   background: color-mix(in oklab, var(--primary) 30%, white);
 }
+
+/* Avtomatsko izpolnjevanje brskalnika naj ohrani kontrast v dark mode */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill {
+  -webkit-text-fill-color: #f8fafc;
+  caret-color: #f8fafc;
+  box-shadow: 0 0 0px 1000px #020617 inset;
+  transition: background-color 99999s ease-in-out 0s;
+}

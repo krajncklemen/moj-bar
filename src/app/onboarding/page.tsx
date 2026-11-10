@@ -23,20 +23,22 @@ export default function OnboardingPage() {
 
   if (!ready || !session || location) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-sm text-slate-500">
+      <div className="flex min-h-screen items-center justify-center text-sm text-slate-500 dark:text-slate-300">
         Nalagam…
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#ccfbf1,transparent_40%),#f8fafc] px-4 py-10 dark:bg-[#020617]">
+    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#ccfbf1,transparent_40%),#f8fafc] px-4 py-10 text-slate-900 dark:bg-[#020617] dark:text-slate-50">
       <Card className="w-full max-w-lg">
         <CardHeader>
-          <div className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">
+          <div className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700 dark:text-teal-300">
             Moj Bar · korak 1/1
           </div>
-          <CardTitle className="mt-2 text-2xl">Ustvari lokacijo</CardTitle>
+          <CardTitle className="mt-2 text-2xl text-slate-900 dark:text-white">
+            Ustvari lokacijo
+          </CardTitle>
           <CardDescription>
             Pozdravljeni, {session.profile.fullName}. Nato lahko takoj urejate urnik.
           </CardDescription>

@@ -31,14 +31,16 @@ export default function PrijavaPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 text-slate-900 dark:text-slate-50">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#99f6e4_0%,transparent_35%),radial-gradient(circle_at_80%_0%,#a5f3fc_0%,transparent_30%),linear-gradient(180deg,#f8fafc,#ecfeff)] dark:bg-[radial-gradient(circle_at_20%_20%,#115e59_0%,transparent_35%),linear-gradient(180deg,#020617,#042f2e)]" />
       <Card className="relative z-10 w-full max-w-md">
         <CardHeader>
           <div className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700 dark:text-teal-300">
             Moj Bar
           </div>
-          <CardTitle className="mt-2 text-2xl">Prijava</CardTitle>
+          <CardTitle className="mt-2 text-2xl text-slate-900 dark:text-white">
+            Prijava
+          </CardTitle>
           <CardDescription>
             Upravljaj urnik, smene in ekipo na enem mestu.
           </CardDescription>
@@ -67,19 +69,22 @@ export default function PrijavaPage() {
                 required
               />
             </div>
-            <Button className="w-full" type="submit" size="lg" disabled={loading}>
+            <Button className="w-full text-white" type="submit" size="lg" disabled={loading}>
               {loading ? "Prijavljam…" : "Prijava"}
             </Button>
           </form>
-          <div className="mt-4 space-y-3 text-center text-sm text-slate-500">
+          <div className="mt-4 space-y-3 text-center text-sm text-slate-600 dark:text-slate-300">
             <p>
               Nimate računa?{" "}
-              <Link href="/registracija" className="font-medium text-teal-700">
+              <Link
+                href="/registracija"
+                className="font-medium text-teal-700 dark:text-teal-300"
+              >
                 Registracija lastnika
               </Link>
             </p>
-            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 p-3 text-left dark:border-slate-700 dark:bg-slate-900/50">
-              <p className="text-xs text-slate-500">
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 p-3 text-left dark:border-slate-600 dark:bg-slate-950/60">
+              <p className="text-xs text-slate-600 dark:text-slate-300">
                 Lokalni vzorčni način (brez strežniškega Auth) – naloži primer
                 lokacije z urnikom.
               </p>
