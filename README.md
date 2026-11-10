@@ -28,7 +28,7 @@ Brez `NEXT_PUBLIC_SUPABASE_*` teče **demo način** (localStorage). Z nastavljen
 
 1. **Auth + onboarding** – registracija lastnika, ustvarjanje lokacije
 2. **URNIK** – mreža dan × smena, `+` dodajanje, drag & drop, odstranitev, barve, filter, kopiranje tedna, mobilni swipe, horizont 2 meseca
-3. **Lokacija** – ime, logo (upload/URL), Facebook og:image scrape, delovni čas, naslov
+3. **Lokacija** – ime, logo (upload/URL), delovni čas, naslov
 4. **Smene, zaposleni** – avtomatski employee dostop ob dodajanju
 5. **Dejansko, dopusti/bolniške** (siv status na urniku), promet, opomniki, dolžniki, uspešnost
 

@@ -23,7 +23,6 @@ export interface Location {
   ownerId: string;
   name: string;
   logoUrl?: string;
-  facebookUrl?: string;
   address?: string;
   workingHours: WorkingHours;
 }

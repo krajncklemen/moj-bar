@@ -139,7 +139,6 @@ export function createDemoState(): AppState {
       ownerId,
       name: "Vzorčni bar",
       logoUrl: "",
-      facebookUrl: "",
       address: "Primerjeva 1, 1000 Ljubljana",
       workingHours: {
         pon: "08:00–24:00",

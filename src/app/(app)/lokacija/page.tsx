@@ -13,32 +13,9 @@ export default function LokacijaPage() {
   const [name, setName] = useState(location?.name || "");
   const [address, setAddress] = useState(location?.address || "");
   const [logoUrl, setLogoUrl] = useState(location?.logoUrl || "");
-  const [facebookUrl, setFacebookUrl] = useState(location?.facebookUrl || "");
   const [hours, setHours] = useState(location?.workingHours || {});
-  const [scraping, setScraping] = useState(false);
 
   if (!location) return null;
-
-  async function scrapeFacebook() {
-    if (!facebookUrl) return;
-    setScraping(true);
-    try {
-      const res = await fetch(
-        `/api/facebook-og?url=${encodeURIComponent(facebookUrl)}`
-      );
-      const data = await res.json();
-      if (data.image) {
-        setLogoUrl(data.image);
-        toast.success("Prenesen og:image z Facebooka");
-      } else {
-        toast.message(data.error || "og:image ni bil najden");
-      }
-    } catch {
-      toast.error("Scrape ni uspel");
-    } finally {
-      setScraping(false);
-    }
-  }
 
   function onSave(e: React.FormEvent) {
     e.preventDefault();
@@ -47,7 +24,6 @@ export default function LokacijaPage() {
       name,
       address,
       logoUrl,
-      facebookUrl,
       workingHours: hours,
     });
     toast.success("Lokacija shranjena");
@@ -66,7 +42,7 @@ export default function LokacijaPage() {
         <CardHeader>
           <CardTitle>Osnovni podatki</CardTitle>
           <CardDescription>
-            Logo lahko naložite kot URL ali povlečete og:image iz Facebook strani.
+            Logo lahko nastavite z URL-jem ali lokalnim nalaganjem datoteke.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -123,25 +99,6 @@ export default function LokacijaPage() {
                     reader.readAsDataURL(file);
                   }}
                 />
-              </div>
-            </div>
-            <div>
-              <Label>Facebook URL</Label>
-              <div className="flex flex-col gap-2 sm:flex-row">
-                <Input
-                  value={facebookUrl}
-                  onChange={(e) => setFacebookUrl(e.target.value)}
-                  disabled={!isOwner}
-                  placeholder="https://facebook.com/…"
-                />
-                <Button
-                  type="button"
-                  variant="secondary"
-                  disabled={!isOwner || scraping}
-                  onClick={scrapeFacebook}
-                >
-                  {scraping ? "Iščem…" : "Prevzemi og:image"}
-                </Button>
               </div>
             </div>
 
