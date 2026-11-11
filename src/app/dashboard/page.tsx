@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MOJ BAR · Portal</title>
-  <link rel="icon" href="/assets/foch-logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/login.css" />
-  <link rel="stylesheet" href="/css/app.css" />
-</head>
-<body class="app-body">
+"use client";
+
+import { useEffect } from "react";
+import { loadScripts } from "@/lib/load-scripts";
+
+const DASH_MARKUP = `
   <div class="stage" aria-hidden="true">
     <div class="wash"></div>
     <div class="orb orb-1"></div>
@@ -62,8 +54,41 @@
   </div>
 
   <div id="modal"></div>
-  <script src="/js/storage.js"></script>
-  <script src="/js/data.js"></script>
-  <script src="/js/app.js"></script>
-</body>
-</html>
+`;
+
+export default function DashboardPage() {
+  useEffect(() => {
+    document.body.classList.add("app-body");
+    const links = ["/css/login.css", "/css/app.css"].map((href) => {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      link.dataset.mojbarCss = href;
+      document.head.appendChild(link);
+      return link;
+    });
+
+    let cancelled = false;
+    loadScripts(["/js/storage.js", "/js/data.js", "/js/app.js"]).catch(
+      (err) => {
+        if (!cancelled) console.error(err);
+      }
+    );
+
+    return () => {
+      cancelled = true;
+      document.body.classList.remove("app-body");
+      links.forEach((l) => l.remove());
+      document
+        .querySelectorAll("script[data-mojbar-src]")
+        .forEach((el) => el.remove());
+    };
+  }, []);
+
+  return (
+    <div
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{ __html: DASH_MARKUP }}
+    />
+  );
+}

@@ -22,7 +22,7 @@ loadUsers();
 loadVenues();
 
 if (Storage.getSession("foch_user")) {
-  location.replace("./dashboard.html");
+  location.replace("/dashboard");
 }
 
 toggle?.addEventListener("click", () => {
@@ -53,7 +53,7 @@ form?.addEventListener("submit", (e) => {
     role: user.role,
     name: user.name,
   });
-  location.href = "./dashboard.html";
+  location.href = "/dashboard";
 });
 
 document.getElementById("load-sample")?.addEventListener("click", () => {
@@ -174,5 +174,5 @@ document.getElementById("reg-form-2")?.addEventListener("submit", (e) => {
     role: "admin",
     name: pendingAdmin.name,
   });
-  location.href = "./dashboard.html";
+  location.href = "/dashboard";
 });

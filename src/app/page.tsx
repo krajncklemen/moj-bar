@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MOJ BAR · Prijava</title>
-  <link rel="icon" href="/assets/foch-logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/login.css" />
-</head>
-<body>
+"use client";
+
+import { useEffect } from "react";
+import { loadScripts } from "@/lib/load-scripts";
+
+const LOGIN_MARKUP = `
   <div class="stage" aria-hidden="true">
     <div class="wash"></div>
     <div class="orb orb-1"></div>
@@ -35,8 +28,8 @@
         <h1>MOJ BAR</h1>
         <p class="tag">Urniki, dežurstva in dopusti za oba lokala — ena prijava za administracijo in strežbo.</p>
         <ul class="pills">
-          <li>Foch Bar</li>
-          <li>Label Bar</li>
+          <li>Lokal A</li>
+          <li>Lokal B</li>
           <li>Samo strežba</li>
         </ul>
       </aside>
@@ -52,7 +45,7 @@
           <form id="login-form" novalidate>
             <label class="field">
               <span>Uporabniško ime</span>
-              <input type="text" name="username" id="username" required autofocus autocomplete="username" placeholder="npr. monika" />
+              <input type="text" name="username" id="username" required autofocus autocomplete="username" placeholder="npr. ana" />
             </label>
 
             <label class="field">
@@ -146,9 +139,40 @@
   </main>
 
   <footer class="foot">MOJ BAR · interni portal · 2026</footer>
-  <script src="/js/storage.js"></script>
-  <script src="/js/data.js"></script>
-  <script src="/js/seed.js"></script>
-  <script src="/js/auth.js"></script>
-</body>
-</html>
+`;
+
+export default function LoginPage() {
+  useEffect(() => {
+    document.body.classList.remove("app-body");
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/css/login.css";
+    link.dataset.mojbarCss = "login";
+    document.head.appendChild(link);
+
+    let cancelled = false;
+    loadScripts([
+      "/js/storage.js",
+      "/js/data.js",
+      "/js/seed.js",
+      "/js/auth.js",
+    ]).catch((err) => {
+      if (!cancelled) console.error(err);
+    });
+
+    return () => {
+      cancelled = true;
+      link.remove();
+      document
+        .querySelectorAll("script[data-mojbar-src]")
+        .forEach((el) => el.remove());
+    };
+  }, []);
+
+  return (
+    <div
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{ __html: LOGIN_MARKUP }}
+    />
+  );
+}
