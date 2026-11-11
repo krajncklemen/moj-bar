@@ -1,7 +1,7 @@
 # MOJ BAR
 
 Interni portal za gostince (urniki, dopusti, menjave, ekipa, izkupiček, dolžniki).  
-Logika in izgled po prototipu Foch Bar Portal.
+Next.js App Router + Foch portal look&feel (klientska logika v `public/js`).
 
 ## Zagon
 
@@ -12,18 +12,10 @@ npm run dev
 
 Odpri http://127.0.0.1:3000
 
-**Začetek:** registracija v 2 korakih **ali** gumb »Naloži vzorčne podatke« (gesla se ustvarijo naključno in prikažejo enkrat).
+**Začetek:** registracija v 2 korakih **ali** gumb »Naloži vzorčne podatke« (gesla naključna, prikažejo se enkrat).
 
 ## Funkcije
 
 - Prijava (ista stran za admin in zaposlene) + registracija v 2 korakih
-- Več lokalov
-- Urnik z drag & drop, ure začetka, tekoči/naslednji mesec, pobriši teden
-- Dopusti / bolniška / prosto
-- Menjave izmen (sodelavka → vodja)
-- Ekipa + arhiv Pretekle
-- Izkupiček / manjko
-- Dolžniki
-- Pregled (pokritost, urnik, prošnje, lestvica ur)
-
-Podatki: `localStorage` prek `public/js/storage.js` (pripravljeno za kasnejši backend).
+- Več lokalov, urnik DnD, dopusti, menjave, ekipa, izkupiček, dolžniki, pregled
+- Data layer: `localStorage` (`public/js/storage.js`)

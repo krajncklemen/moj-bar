@@ -1,8 +1,8 @@
 node_modules
 dist
+.next
 .DS_Store
 *.local
 .env
 .env.*
 !.env.example
-.next

@@ -19,20 +19,20 @@ const PLAN_MONTHS = [CURRENT_MONTH, NEXT_MONTH];
 function getSession() {
   const raw = sessionStorage.getItem("foch_user");
   if (!raw) {
-    location.replace("./index.html");
+    location.replace("/");
     return null;
   }
   try {
     const session = JSON.parse(raw);
     if (!session || !session.username || !session.role) {
       sessionStorage.removeItem("foch_user");
-      location.replace("./index.html");
+      location.replace("/");
       return null;
     }
     return session;
   } catch (e) {
     sessionStorage.removeItem("foch_user");
-    location.replace("./index.html");
+    location.replace("/");
     return null;
   }
 }
@@ -441,7 +441,7 @@ if (!user) {
   updateWeekbar();
   document.getElementById("logout").addEventListener("click", () => {
     sessionStorage.removeItem("foch_user");
-    location.replace("./index.html");
+    location.replace("/");
   });
 
   document.querySelectorAll(".nav [data-view]").forEach((btn) => {
