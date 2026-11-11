@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MOJ BAR · Portal</title>
+  <link rel="icon" href="/assets/foch-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/login.css" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body class="app-body">
+  <div class="stage" aria-hidden="true">
+    <div class="wash"></div>
+    <div class="orb orb-1"></div>
+    <div class="mesh"></div>
+  </div>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand-mini">
+        <img src="/assets/foch-logo.png" alt="MOJ BAR" />
+        <div>
+          <strong>MOJ BAR</strong>
+          <span>Interni portal</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <button type="button" data-view="pregled" class="active">Pregled</button>
+        <button type="button" data-view="urnik">Urnik</button>
+        <button type="button" data-view="dopusti">Dopusti</button>
+        <button type="button" data-view="menjave">Menjave</button>
+        <button type="button" data-view="dolzniki">Dolžniki</button>
+        <button type="button" data-view="izkupicek">Izkupiček</button>
+        <button type="button" data-view="ekipa" data-role="admin">Ekipa</button>
+      </nav>
+      <div class="who">
+        <div class="meta">
+          <b id="who-name">—</b>
+          <small id="who-role">—</small>
+        </div>
+        <button class="ghost" type="button" id="logout">Odjava</button>
+      </div>
+    </header>
+
+    <div class="weekbar">
+      <h2>Teden</h2>
+      <span id="week-label"></span>
+    </div>
+
+    <main class="content">
+      <div id="view-pregled"></div>
+      <div id="view-urnik" class="hidden"></div>
+      <div id="view-dopusti" class="hidden"></div>
+      <div id="view-menjave" class="hidden"></div>
+      <div id="view-dolzniki" class="hidden"></div>
+      <div id="view-izkupicek" class="hidden"></div>
+      <div id="view-ekipa" class="hidden"></div>
+    </main>
+  </div>
+
+  <div id="modal"></div>
+  <script src="/js/storage.js"></script>
+  <script src="/js/data.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
